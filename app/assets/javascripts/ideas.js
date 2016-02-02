@@ -75,13 +75,10 @@ function editIdea(id){
         type: 'PUT',
         url: '/api/v1/ideas/' + id + '.json',
         data: ideaObject,
-        success: function(idea){
-          $('#edit-idea-title-text' + id).html(ideaTitle);
-          $('edit-idea-body-text' + id).html(ideaBody);
-          $('#edit-idea-title' + id).hide();
-          $('#edit-idea-body' + id).hide();
-          $('#edit-idea-button' + id).show();
-          $('#cancel-edit' + id).hide()
+        success: function(){
+          $('#idea-title' + id).html(ideaTitle);
+          $('#idea-body' + id).html(ideaBody);
+          closeEditFields();
         }
     });
   })
@@ -90,12 +87,16 @@ function editIdea(id){
   })
 };
 
+function closeEditFields(id){
+  $('#edit-idea-title' + id).hide();
+  $('#edit-idea-body' + id).hide();
+  $('#edit-idea-button' + id).show();
+  $('#cancel-edit' + id).hide()
+};
+
 function cancelEdit(id){
   $('#cancel-edit' + id).on('click', function(){
-    $('#edit-idea-title' + id).hide();
-    $('#edit-idea-body' + id).hide();
-    $('#edit-idea-button' + id).show();
-    $('#cancel-edit' + id).hide()
+    closeEditFields();
   });
 };
 
@@ -126,8 +127,8 @@ function renderIdea(idea){
   var body = truncateBody(idea.body);
 
   $('#idea-index').prepend(
-    '<p class="idea"><h4>' + idea.id + '. ' + idea.title + '</h4>' +
-    '"' + body + '" <br><br>' +
+    '<p class="idea"><h4>' + idea.id + '. <span id="idea-title' + idea.id + '">' + idea.title + '</span></h4>' +
+    '<span id="idea-body'+idea.id+'">"' + body + '" </span><br><br>' +
     '<strong> People think this idea is: </strong><em><div id="idea-quality' + idea.id + '">' + idea.quality +
     '</div></em></p>' +
     '<a href="#"><i class="material-icons" id="thumb-up' + idea.id + '">thumb_up</i></a>' +
