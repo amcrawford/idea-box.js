@@ -18,6 +18,11 @@ class Api::V1::IdeasController < Api::V1::BaseController
     respond_with @idea, json: @idea
   end
 
+  def destroy
+    @idea = Idea.destroy(params[:id])
+    respond_with @idea, json: @idea
+  end
+
   private
 
   def idea_params
