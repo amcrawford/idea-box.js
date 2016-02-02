@@ -3,30 +3,50 @@ $(document).ready(function(){
   createIdea()
 });
 
-function likeIdea(id, oldQuality){
+function likeIdea(id){
   $('#thumb-up' + id).on('click', function(){
+    $.ajax($.getJSON('/api/v1/ideas/'+ id, function(idea){
+      var newQuality = function(){
+        if (idea.quality === 'swill'){
+          return 'plausible'
+        } else { return 'genius'}
+      };
 
-    function newQuality(){
-      if (oldQuality === 'swill'){
-        return 'plausible'
-      } else { return 'genius'}
-    };
-
-    $.ajax({
-      type: 'PUT',
-      url: '/api/v1/ideas/' + id + '.json',
-      data: {
-        idea: {quality: newQuality}
-      },
-      success: function(idea){
-        // 
-      }
-    })
+      $.ajax({
+        type: 'PUT',
+        url: '/api/v1/ideas/' + id + '.json',
+        data: {
+          idea: {quality: newQuality}
+        },
+        success: function(idea){
+          $('#idea-quality' + id).html(newQuality);
+        }
+      })
+    }))
   })
 };
 
-function dislikeIdea(){
+function dislikeIdea(id){
+  $('#thumb-down' + id).on('click', function(){
+    $.ajax($.getJSON('/api/v1/ideas/'+ id, function(idea){
+      var newQuality = function(){
+        if (idea.quality === 'genius'){
+          return 'plausible'
+        } else { return 'swill'}
+      };
 
+      $.ajax({
+        type: 'PUT',
+        url: '/api/v1/ideas/' + id + '.json',
+        data: {
+          idea: {quality: newQuality}
+        },
+        success: function(idea){
+          $('#idea-quality' + id).html(newQuality);
+        }
+      })
+    }))
+  })
 };
 
 function getIdeaIndex(){
@@ -65,15 +85,15 @@ function renderIdea(idea){
   var body = truncateBody(idea.body);
 
   $('#idea-index').prepend(
-    '<p><h3>' + idea.id + '. ' + idea.title + '</h3>' +
+    '<p class="idea"><h4>' + idea.id + '. ' + idea.title + '</h4>' +
     '"' + body + '" <br><br>' +
-    '<strong> People think this idea is: </strong><em><span id="idea-quality' + idea.id + '">' + idea.quality +
-    '</span></em></p>' +
+    '<strong> People think this idea is: </strong><em><div id="idea-quality' + idea.id + '">' + idea.quality +
+    '</div></em></p>' +
     '<a href="#"><i class="material-icons" id="thumb-up' + idea.id + '">thumb_up</i></a>' +
-    '<a href="#"><i class="material-icons" id="thumb-down">thumb_down</i></a>'
+    '<a href="#"><i class="material-icons" id="thumb-down'+ idea.id + '">thumb_down</i></a>'
   );
-  likeIdea(idea.id, idea.quality);
-  // dislikeIdea(idea.id);
+  likeIdea(idea.id);
+  dislikeIdea(idea.id);
 };
 
 function truncateBody(body){
