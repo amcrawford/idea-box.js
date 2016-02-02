@@ -145,8 +145,8 @@ function renderIdea(idea){
   $('#idea-index').prepend(
     '<div id="idea-' + idea.id + '"><p class="idea"><h4>' + idea.id + '. <span id="idea-title' + idea.id + '">' + idea.title + '</span></h4>' +
     '<span id="idea-body'+idea.id+'">"' + body + '" </span><br><br>' +
-    '<strong> People think this idea is: </strong><em><div id="idea-quality' + idea.id + '">' + idea.quality +
-    '</div></em></p>' +
+    '<strong> People think this idea is: </strong><em><span id="idea-quality' + idea.id + '">' + idea.quality +
+    '</span></em></p>' +
     '<a href="#"><i class="material-icons" id="thumb-up' + idea.id + '">thumb_up</i></a>' +
     '<a href="#"><i class="material-icons" id="thumb-down'+ idea.id + '">thumb_down</i></a><br>' +
     '<div id="edit-idea'+ idea.id +'"><div id="edit-idea-title' + idea.id + '"><input class="validate" type="text" id="edit-idea-title-text' + idea.id + '" value="New Title Here"></div>' +
