@@ -94,6 +94,7 @@ function closeEditFields(id){
   $('#edit-idea-title' + id).hide();
   $('#edit-idea-body' + id).hide();
   $('#edit-idea-button' + id).show();
+  $('#save-edit' + id).hide()
   $('#cancel-edit' + id).hide()
 };
 
