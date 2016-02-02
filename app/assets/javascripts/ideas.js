@@ -65,7 +65,7 @@ function renderIdea(idea){
   var body = truncateBody(idea.body);
 
   $('#idea-index').prepend(
-    '<p id="idea"'+ idea.id + '><h3>' + idea.id + '. ' + idea.title + '</h3>' +
+    '<p><h3>' + idea.id + '. ' + idea.title + '</h3>' +
     '"' + body + '" <br><br>' +
     '<strong> People think this idea is: </strong><em><div id="idea-quality' + idea.id + '">' + idea.quality +
     '</div></em></p>' +
