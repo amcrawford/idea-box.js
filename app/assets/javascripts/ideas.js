@@ -58,10 +58,45 @@ function getIdeaIndex(){
 };
 
 function editIdea(id){
-  $('#edit-idea' + id).on('click', function(){
-    $('#edit-idea-title' + id).show();
-    $('#edit-idea-body' + id).show();
+  $('#edit-idea-button' + id).on('click', function(){
+    $('#edit-idea' + id).show();
+    $('#edit-idea-button' + id).hide();
+
+    $('#save-edit' + id).on('click', function(){
+      var ideaTitle = $('#edit-idea-title-text' + id).val();
+      var ideaBody = $('#edit-idea-body-text' + id).val();
+      var ideaObject = {
+        idea: {
+          title: ideaTitle,
+          body: ideaBody
+        }
+      };
+      $.ajax({
+        type: 'PUT',
+        url: '/api/v1/ideas/' + id + '.json',
+        data: ideaObject,
+        success: function(idea){
+          $('#edit-idea-title-text' + id).html(ideaTitle);
+          $('edit-idea-body-text' + id).html(ideaBody);
+          $('#edit-idea-title' + id).hide();
+          $('#edit-idea-body' + id).hide();
+          $('#edit-idea-button' + id).show();
+          $('#cancel-edit' + id).hide()
+        }
+    });
   })
+
+    cancelEdit(id);
+  })
+};
+
+function cancelEdit(id){
+  $('#cancel-edit' + id).on('click', function(){
+    $('#edit-idea-title' + id).hide();
+    $('#edit-idea-body' + id).hide();
+    $('#edit-idea-button' + id).show();
+    $('#cancel-edit' + id).hide()
+  });
 };
 
 function createIdea(){
@@ -97,12 +132,14 @@ function renderIdea(idea){
     '</div></em></p>' +
     '<a href="#"><i class="material-icons" id="thumb-up' + idea.id + '">thumb_up</i></a>' +
     '<a href="#"><i class="material-icons" id="thumb-down'+ idea.id + '">thumb_down</i></a><br>' +
-    '<div id="edit-idea-title'+idea.id+'"><input class="validate" type="text" id="edit-idea-title' + idea.id+ '" value="'+ idea.title + '"></div>' +
-    '<div id="edit-idea-body'+idea.id+'"><input class="validate" type="text" id="edit-idea-body' + idea.id+ '" value="'+ idea.body + '"></div>' +
-    '<input class="btn btn-small pull-right" id="edit-idea'+ idea.id+'" type="button" name="submit" value="Edit">'
+    '<div id="edit-idea'+ idea.id +'"><div id="edit-idea-title' + idea.id + '"><input class="validate" type="text" id="edit-idea-title-text' + idea.id + '" value="New Title Here"></div>' +
+    '<div id="edit-idea-body' + idea.id +'"><input class="validate" type="text" id="edit-idea-body-text' + idea.id + '" value="New Description Here"></div>' +
+    '<input class="btn-small pull-right" id="save-edit'+ idea.id +'" type="button" name="submit" value="Save">' +
+    '<input class="btn-small pull-right" id="cancel-edit'+ idea.id +'" type="button" name="submit" value="Cancel"></div>' +
+    '<input class="btn-small pull-right" id="edit-idea-button'+ idea.id +'" type="button" name="submit" value="Edit">'
+
   );
-  $('#edit-idea-title' + idea.id).hide();
-  $('#edit-idea-body' + idea.id).hide();
+  $('#edit-idea' + idea.id).hide();
 
   editIdea(idea.id);
   likeIdea(idea.id);
