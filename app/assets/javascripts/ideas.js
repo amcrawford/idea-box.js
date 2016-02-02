@@ -25,8 +25,26 @@ function likeIdea(id, oldQuality){
   })
 };
 
-function dislikeIdea(){
+function dislikeIdea(id, oldQuality){
+  $('#thumb-down' + id).on('click', function(){
 
+    var newQuality = function(){
+      if (oldQuality === 'genius'){
+        return 'plausible'
+      } else { return 'swill'}
+    };
+
+    $.ajax({
+      type: 'PUT',
+      url: '/api/v1/ideas/' + id + '.json',
+      data: {
+        idea: {quality: newQuality}
+      },
+      success: function(){
+        $('#idea-quality' + id).html(newQuality);
+      }
+    })
+  })
 };
 
 function getIdeaIndex(){
@@ -65,15 +83,15 @@ function renderIdea(idea){
   var body = truncateBody(idea.body);
 
   $('#idea-index').prepend(
-    '<p><h3>' + idea.id + '. ' + idea.title + '</h3>' +
+    '<p><h4>' + idea.id + '. ' + idea.title + '</h4>' +
     '"' + body + '" <br><br>' +
     '<strong> People think this idea is: </strong><em><div id="idea-quality' + idea.id + '">' + idea.quality +
     '</div></em></p>' +
     '<a href="#"><i class="material-icons" id="thumb-up' + idea.id + '">thumb_up</i></a>' +
-    '<a href="#"><i class="material-icons" id="thumb-down">thumb_down</i></a>'
+    '<a href="#"><i class="material-icons" id="thumb-down'+ idea.id + '">thumb_down</i></a>'
   );
   likeIdea(idea.id, idea.quality);
-  // dislikeIdea(idea.id);
+  dislikeIdea(idea.id, idea.quality);
 };
 
 function truncateBody(body){
