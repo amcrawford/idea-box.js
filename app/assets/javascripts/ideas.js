@@ -57,6 +57,13 @@ function getIdeaIndex(){
   })
 };
 
+function editIdea(id){
+  $('#edit-idea' + id).on('click', function(){
+    $('#edit-idea-title' + id).show();
+    $('#edit-idea-body' + id).show();
+  })
+};
+
 function createIdea(){
   $('#create-idea').on('click', function(){
     var ideaTitle = $('#idea-title').val();
@@ -67,7 +74,6 @@ function createIdea(){
         body: ideaBody
       }
     };
-
     $.ajax({
       type: 'POST',
       url: '/api/v1/ideas.json',
@@ -90,8 +96,15 @@ function renderIdea(idea){
     '<strong> People think this idea is: </strong><em><div id="idea-quality' + idea.id + '">' + idea.quality +
     '</div></em></p>' +
     '<a href="#"><i class="material-icons" id="thumb-up' + idea.id + '">thumb_up</i></a>' +
-    '<a href="#"><i class="material-icons" id="thumb-down'+ idea.id + '">thumb_down</i></a>'
+    '<a href="#"><i class="material-icons" id="thumb-down'+ idea.id + '">thumb_down</i></a><br>' +
+    '<div id="edit-idea-title'+idea.id+'"><input class="validate" type="text" id="edit-idea-title' + idea.id+ '" value="'+ idea.title + '"></div>' +
+    '<div id="edit-idea-body'+idea.id+'"><input class="validate" type="text" id="edit-idea-body' + idea.id+ '" value="'+ idea.body + '"></div>' +
+    '<input class="btn btn-small pull-right" id="edit-idea'+ idea.id+'" type="button" name="submit" value="Edit">'
   );
+  $('#edit-idea-title' + idea.id).hide();
+  $('#edit-idea-body' + idea.id).hide();
+
+  editIdea(idea.id);
   likeIdea(idea.id);
   dislikeIdea(idea.id);
 };
