@@ -127,11 +127,23 @@ function createIdea(){
   });
 };
 
+function deleteIdea(id){
+  $('#delete-idea-button' + id).on('click', function(){
+    $.ajax({
+      type: 'DELETE',
+      url: '/api/v1/ideas/' + id + '.json',
+      success: function(){
+        $('#idea-' + id).remove();
+      }
+    });
+  })
+};
+
 function renderIdea(idea){
   var body = truncateBody(idea.body);
 
   $('#idea-index').prepend(
-    '<p class="idea"><h4>' + idea.id + '. <span id="idea-title' + idea.id + '">' + idea.title + '</span></h4>' +
+    '<div id="idea-' + idea.id + '"><p class="idea"><h4>' + idea.id + '. <span id="idea-title' + idea.id + '">' + idea.title + '</span></h4>' +
     '<span id="idea-body'+idea.id+'">"' + body + '" </span><br><br>' +
     '<strong> People think this idea is: </strong><em><div id="idea-quality' + idea.id + '">' + idea.quality +
     '</div></em></p>' +
@@ -141,7 +153,8 @@ function renderIdea(idea){
     '<div id="edit-idea-body' + idea.id +'"><input class="validate" type="text" id="edit-idea-body-text' + idea.id + '" value="New Description Here"></div>' +
     '<input class="btn-small pull-right" id="save-edit'+ idea.id +'" type="button" name="submit" value="Save">' +
     '<input class="btn-small pull-right" id="cancel-edit'+ idea.id +'" type="button" name="submit" value="Cancel"></div>' +
-    '<input class="btn-small pull-right" id="edit-idea-button'+ idea.id +'" type="button" name="submit" value="Edit">'
+    '<input class="btn-small pull-right" id="edit-idea-button'+ idea.id +'" type="button" name="submit" value="Edit">' +
+    '<input class="btn-small pull-right" id="delete-idea-button'+ idea.id +'" type="button" name="submit" value="Delete"></div>'
 
   );
   $('#edit-idea' + idea.id).hide();
@@ -149,6 +162,7 @@ function renderIdea(idea){
   editIdea(idea.id);
   likeIdea(idea.id);
   dislikeIdea(idea.id);
+  deleteIdea(idea.id);
 };
 
 function truncateBody(body){
