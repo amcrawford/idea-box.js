@@ -1,13 +1,14 @@
 $(document).ready(function(){
   getIdeaIndex()
   createIdea()
+  searchIdeas()
 });
 
 function likeIdea(id){
   $('#thumb-up' + id).on('click', function(){
     event.preventDefault();
 
-    $.ajax($.getJSON('/api/v1/ideas/'+ id, function(idea){
+    $.getJSON('/api/v1/ideas/'+ id, function(idea){
       var newQuality = function(){
         if (idea.quality === 'swill'){
           return 'plausible'
@@ -24,7 +25,7 @@ function likeIdea(id){
           $('#idea-quality' + id).html(newQuality);
         }
       })
-    }))
+    })
   })
 };
 
@@ -32,7 +33,7 @@ function dislikeIdea(id){
   $('#thumb-down' + id).on('click', function(){
     event.preventDefault();
 
-    $.ajax($.getJSON('/api/v1/ideas/'+ id, function(idea){
+    $.getJSON('/api/v1/ideas/'+ id, function(idea){
       var newQuality = function(){
         if (idea.quality === 'genius'){
           return 'plausible'
@@ -49,7 +50,7 @@ function dislikeIdea(id){
           $('#idea-quality' + id).html(newQuality);
         }
       })
-    }))
+    })
   })
 };
 
@@ -64,6 +65,7 @@ function getIdeaIndex(){
 function editIdea(id){
   $('#edit-idea-button' + id).on('click', function(){
     $('#edit-idea' + id).show();
+
     $('#edit-idea-button' + id).hide();
 
     $('#save-edit' + id).on('click', function(){
@@ -91,11 +93,8 @@ function editIdea(id){
 };
 
 function closeEditFields(id){
-  $('#edit-idea-title' + id).hide();
-  $('#edit-idea-body' + id).hide();
+  $('#edit-idea' + id).hide();
   $('#edit-idea-button' + id).show();
-  $('#save-edit' + id).hide()
-  $('#cancel-edit' + id).hide()
 };
 
 function cancelEdit(id){
@@ -139,22 +138,34 @@ function deleteIdea(id){
   })
 };
 
+function searchIdeas(){
+  // $('#search-text').keyup(function(){
+  //   var searchText = $('#search-text').val();
+  //   ideas = $('.idea').each(function(index, idea){
+  //     var matchedText =searchText.indexOf($(idea).find('#idea-title').text().toLowerCase()) === -1  || searchText.indexOf($(idea).find('#idea-title').text().toLowerCase()) === -1  ){
+  //       $(idea).toggle();
+  //     } else { }
+  //   })
+  // })
+};
+
 function renderIdea(idea){
   var body = truncateBody(idea.body);
 
   $('#idea-index').prepend(
-    '<div id="idea-' + idea.id + '"><p class="idea"><h4>' + idea.id + '. <span id="idea-title' + idea.id + '">' + idea.title + '</span></h4>' +
-    '<span id="idea-body'+idea.id+'">"' + body + '" </span><br><br>' +
+    '<div class="idea" id="idea-' + idea.id + '"><p class="idea"><h4>' + idea.id + '. <span id="idea-title"><span id="idea-title' + idea.id + '">' + idea.title + '</span>  ' +
+    '<a href="#"><i class="material-icons" id="thumb-up' + idea.id + '">thumb_up</i></a> ' +
+    '<a href="#"><i class="material-icons" id="thumb-down'+ idea.id + '">thumb_down</i></a><br>' +
+    '</h4>' +
+    '</span><span id="idea-body"><span id="idea-body'+idea.id+'">"' + body + '" </span></span><br><br>' +
     '<strong> People think this idea is: </strong><em><span id="idea-quality' + idea.id + '">' + idea.quality +
     '</span></em></p>' +
-    '<a href="#"><i class="material-icons" id="thumb-up' + idea.id + '">thumb_up</i></a>' +
-    '<a href="#"><i class="material-icons" id="thumb-down'+ idea.id + '">thumb_down</i></a><br>' +
-    '<div id="edit-idea'+ idea.id +'"><div id="edit-idea-title' + idea.id + '"><input class="validate" type="text" id="edit-idea-title-text' + idea.id + '" value="New Title Here"></div>' +
-    '<div id="edit-idea-body' + idea.id +'"><input class="validate" type="text" id="edit-idea-body-text' + idea.id + '" value="New Description Here"></div>' +
-    '<input class="btn-small pull-right" id="save-edit'+ idea.id +'" type="button" name="submit" value="Save">' +
-    '<input class="btn-small pull-right" id="cancel-edit'+ idea.id +'" type="button" name="submit" value="Cancel"></div>' +
-    '<input class="btn-small pull-right" id="edit-idea-button'+ idea.id +'" type="button" name="submit" value="Edit">' +
-    '<input class="btn-small pull-right" id="delete-idea-button'+ idea.id +'" type="button" name="submit" value="Delete"></div>'
+    '<div id="edit-idea'+ idea.id +'"><div id="edit-idea-title' + idea.id + '"><input class="validate" type="text" id="edit-idea-title-text' + idea.id + '" placeholder="New Title Here"></div>' +
+    '<div id="edit-idea-body' + idea.id +'"><input class="validate" type="text" id="edit-idea-body-text' + idea.id + '" placeholder="New Description Here"></div>' +
+    '<input class="btn btn-small pull-right" id="save-edit'+ idea.id +'" type="button" name="submit" value="Save"> ' +
+    '<input class="btn btn-small pull-right" id="cancel-edit'+ idea.id +'" type="button" name="submit" value="Cancel"></div><br> ' +
+    '<input class="btn btn-small pull-right" id="edit-idea-button'+ idea.id +'" type="button" name="submit" value="Edit">  ' +
+    '<input class="btn btn-small pull-right" id="delete-idea-button'+ idea.id +'" type="button" name="submit" value="Delete"></div>'
 
   );
   $('#edit-idea' + idea.id).hide();
