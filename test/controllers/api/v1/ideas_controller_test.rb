@@ -66,17 +66,19 @@ class Api::V1::IdeasControllerTest < ActionController::TestCase
     assert_response :success
   end
 
-  # test "#update updates the data" do
-  #   idea = Idea.create(title: 'testing_update', body: 'body')
-  #
-  #   assert_equal 'testing_update', idea.title
-  #   assert_equal 'body', idea.body
-  #
-  #   put :update, format: :json, id: idea.id, idea: {title: 'testing_update_worked_again', body: 'omg totally worked'}
-  #
-  #   assert_equal 'testing_update_worked_again', idea.title
-  #   assert_equal 'omg totally worked', idea.body
-  # end
+  test "#update updates the data" do
+    idea = Idea.create(title: 'testing_update', body: 'body')
+
+    assert_equal 'testing_update', idea.title
+    assert_equal 'body', idea.body
+
+    put :update, format: :json, id: idea.id, idea: {title: 'testing_update_worked_again', body: 'omg totally worked'}
+    
+    idea = Idea.find(idea.id)
+
+    assert_equal 'testing_update_worked_again', idea.title
+    assert_equal 'omg totally worked', idea.body
+  end
 
   # test "#delete responsds to json" do
   #   put :delete, format: :json, id: Idea.last.id
