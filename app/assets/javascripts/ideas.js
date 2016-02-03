@@ -84,10 +84,17 @@ function getIdeaIndex(){
 };
 
 function editIdeaTitle(id){
-  // $('#idea-title' + id).on('click', function(){
-  //
-  // })
+  $('#idea-title' + id).keydown(function(){
+    var key = e.which;
+    if (key === 13) {
+      saveEditedTitle()
+    }
+  })
 };
+
+function saveEditedTitle(){
+
+}
 
 function editFullIdea(id){
   $('#edit-idea-button' + id).on('click', function(){
@@ -209,8 +216,8 @@ function renderIdea(idea){
 
 function truncateBody(body){
   if (body.length > 100){
-    var trimmedBody = body.substring(0,101);
-    return trimmedBody.substring(0, Math.min(trimmedBody.length, trimmedBody.lastIndexOf(' ')))
+    var trimmedBody = body.substring(0,98);
+    return trimmedBody.substring(0, Math.min(trimmedBody.length, trimmedBody.lastIndexOf(' '))) + '...'
   } else {
     return body
   };
