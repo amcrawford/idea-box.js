@@ -4,6 +4,27 @@ $(document).ready(function(){
   searchIdeas()
 });
 
+function sortIdeas(){
+  var qualityMap = {
+    "genius": 2,
+    "plausible": 1,
+    "swill": 0
+  };
+
+  var ideas = $('#idea-index div.idea');
+
+  var sortedIdeas = ideas.sort(function(a, b){
+    return qualityMap[$(a).find('.quality').text()] > qualityMap[$(b).find('.quality').text()];
+  });
+
+
+  $('#sort-index').on('click', function(){
+    $('#idea-index').html(sortedIdeas);
+  }).on('click', function(){
+    $('#idea-index').html(sortedIdeas.reverse());
+  })
+};
+
 function likeIdea(id){
   $('#thumb-up' + id).on('click', function(){
     event.preventDefault();
@@ -166,7 +187,7 @@ function renderIdea(idea){
     '<a href="#"><i class="material-icons teal-text" id="thumb-down'+ idea.id + '">thumb_down</i></a><br>' +
     '</h4>' +
     '<span id="idea-body"><span id="idea-body'+idea.id+'" contentEditable=true>"' + body + '" </span></span><br><br>' +
-    '<strong> People think this idea is: </strong><em><span id="idea-quality' + idea.id + '">' + idea.quality +
+    '<strong> People think this idea is: </strong><em><span class="quality" id="idea-quality' + idea.id + '">' + idea.quality +
     '</span></em></p>' +
     '<div id="edit-idea'+ idea.id +'"><div id="edit-idea-title' + idea.id + '"><input class="validate" type="text" id="edit-idea-title-text' + idea.id + '" placeholder="New Title Here"></div>' +
     '<div id="edit-idea-body' + idea.id +'"><input class="validate" type="text" id="edit-idea-body-text' + idea.id + '" placeholder="New Description Here"></div>' +
@@ -183,6 +204,7 @@ function renderIdea(idea){
   likeIdea(idea.id);
   dislikeIdea(idea.id);
   deleteIdea(idea.id);
+  sortIdeas();
 };
 
 function truncateBody(body){
