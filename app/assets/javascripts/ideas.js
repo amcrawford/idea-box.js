@@ -63,9 +63,9 @@ function getIdeaIndex(){
 };
 
 function editIdeaTitle(id){
-  $('#idea-title' + id).on('click', function(){
-
-  })
+  // $('#idea-title' + id).on('click', function(){
+  //
+  // })
 };
 
 function editFullIdea(id){
