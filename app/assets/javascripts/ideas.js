@@ -62,7 +62,13 @@ function getIdeaIndex(){
   })
 };
 
-function editIdea(id){
+function editIdeaTitle(id){
+  $('#idea-title' + id).on('click', function(){
+
+  })
+};
+
+function editFullIdea(id){
   $('#edit-idea-button' + id).on('click', function(){
     $('#edit-idea' + id).show();
 
@@ -155,11 +161,11 @@ function renderIdea(idea){
   var body = truncateBody(idea.body);
 
   $('#idea-index').prepend(
-    '<div class="idea" id="idea-' + idea.id + '"><p class="idea"><h4>' + idea.id + '. <span id="idea-title"><span id="idea-title' + idea.id + '">' + idea.title + '</span>   ' +
+    '<div class="idea" id="idea-' + idea.id + '"><p class="idea"><h4>' + idea.id + '. <span id="idea-title" contentEditable=true><span id="idea-title' + idea.id + '">' + idea.title + '</span> </span>  ' +
     '<a href="#"><i class="material-icons teal-text" id="thumb-up' + idea.id + '">thumb_up</i></a> ' +
     '<a href="#"><i class="material-icons teal-text" id="thumb-down'+ idea.id + '">thumb_down</i></a><br>' +
     '</h4>' +
-    '</span><span id="idea-body"><span id="idea-body'+idea.id+'">"' + body + '" </span></span><br><br>' +
+    '<span id="idea-body"><span id="idea-body'+idea.id+'" contentEditable=true>"' + body + '" </span></span><br><br>' +
     '<strong> People think this idea is: </strong><em><span id="idea-quality' + idea.id + '">' + idea.quality +
     '</span></em></p>' +
     '<div id="edit-idea'+ idea.id +'"><div id="edit-idea-title' + idea.id + '"><input class="validate" type="text" id="edit-idea-title-text' + idea.id + '" placeholder="New Title Here"></div>' +
@@ -172,7 +178,8 @@ function renderIdea(idea){
   );
   $('#edit-idea' + idea.id).hide();
 
-  editIdea(idea.id);
+  editFullIdea(idea.id);
+  editIdeaTitle(idea.id);
   likeIdea(idea.id);
   dislikeIdea(idea.id);
   deleteIdea(idea.id);
