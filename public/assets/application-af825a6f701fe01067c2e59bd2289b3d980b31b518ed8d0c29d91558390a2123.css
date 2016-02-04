@@ -13024,3 +13024,7 @@ button.picker__today:focus, button.picker__clear:focus, button.picker__close:foc
     margin-bottom: 5em;
   }
 }
+/* line 20, /Users/ambercrawford/turing/module_four/idea-box/app/assets/stylesheets/application.scss */
+nav {
+  background-color: black;
+}
