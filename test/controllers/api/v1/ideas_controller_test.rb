@@ -73,15 +73,26 @@ class Api::V1::IdeasControllerTest < ActionController::TestCase
     assert_equal 'body', idea.body
 
     put :update, format: :json, id: idea.id, idea: {title: 'testing_update_worked_again', body: 'omg totally worked'}
-    
+
     idea = Idea.find(idea.id)
 
     assert_equal 'testing_update_worked_again', idea.title
     assert_equal 'omg totally worked', idea.body
   end
 
-  # test "#delete responsds to json" do
-  #   put :delete, format: :json, id: Idea.last.id
-  #   assert_response :success
-  # end
+  test "#delete responsds to json" do
+    put :destroy, format: :json, id: Idea.last.id
+    assert_response :success
+  end
+
+  test "#delete removes the data from database" do
+    idea = Idea.create(title: 'testing_update', body: 'body')
+
+    assert Idea.find_by(title: 'testing_update')
+    idea = Idea.find_by(title: 'testing_update')
+
+    put :destroy, format: :json, id: idea.id
+    
+    refute Idea.find_by(title: 'testing_update')
+  end
 end
