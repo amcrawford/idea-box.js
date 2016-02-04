@@ -10,18 +10,26 @@ function createIdea(){
         tags: ideaTags
       }
     };
-    $.ajax({
-      type: 'POST',
-      url: '/api/v1/ideas.json',
-      data: ideaObject,
-      success: function(idea){
-        renderIdea(idea);
-      }
+    saveIdeaToDatabase(ideaObject)
+    resetCreateFields()
   });
-    $('#idea-title').val('New Title');
-    $('#idea-body').val(' New Description');
-    $('#idea-tags').val(' New Tags');
+};
+
+function saveIdeaToDatabase(ideaObject){
+  $.ajax({
+    type: 'POST',
+    url: '/api/v1/ideas.json',
+    data: ideaObject,
+    success: function(idea){
+      renderIdea(idea);
+    }
   });
+};
+
+function resetCreateFields(){
+  $('#idea-title').val('New Title');
+  $('#idea-body').val(' New Description');
+  $('#idea-tags').val(' New Tags');
 };
 
 function truncateBody(body){

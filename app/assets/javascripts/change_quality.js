@@ -8,17 +8,7 @@ function likeIdea(id){
           return 'plausible'
         } else { return 'genius'}
       };
-
-      $.ajax({
-        type: 'PUT',
-        url: '/api/v1/ideas/' + id + '.json',
-        data: {
-          idea: {quality: newQuality}
-        },
-        success: function(idea){
-          $('#idea-quality' + id).html(newQuality);
-        }
-      })
+      saveNewQuality(id, newQuality)
     })
   })
 };
@@ -33,17 +23,20 @@ function dislikeIdea(id){
           return 'plausible'
         } else { return 'swill'}
       };
-
-      $.ajax({
-        type: 'PUT',
-        url: '/api/v1/ideas/' + id + '.json',
-        data: {
-          idea: {quality: newQuality}
-        },
-        success: function(idea){
-          $('#idea-quality' + id).html(newQuality);
-        }
-      })
+      saveNewQuality(id, newQuality)
     })
+  })
+};
+
+function saveNewQuality(id, newQuality){
+  $.ajax({
+    type: 'PUT',
+    url: '/api/v1/ideas/' + id + '.json',
+    data: {
+      idea: {quality: newQuality}
+    },
+    success: function(idea){
+      $('#idea-quality' + id).html(newQuality);
+    }
   })
 };
