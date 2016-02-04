@@ -266,10 +266,11 @@ function renderTags(id, tagString){
 
       $('#' + tag).on('click', function(){
         $("#idea-index").children().each(function(){
-          if ($(this).children().text().search(new RegExp(tag, "i")) < 0) {
-            $(this).fadeOut();
+          self = this
+          if ($(this).find(".tags").text().search(new RegExp(tag, "i")) < 0) {
+            $(self).fadeOut();
           } else {
-            $(this).show();
+            $(self).show();
           }
         });
       })
