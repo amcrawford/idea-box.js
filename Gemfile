@@ -12,6 +12,8 @@ gem 'hurley'
 gem 'materialize-sass'
 gem 'responders'
 gem 'selenium-webdriver'
+gem 'underscore-rails'
+
 
 group :test do
   gem 'webmock'

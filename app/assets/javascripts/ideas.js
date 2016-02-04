@@ -77,9 +77,24 @@ function dislikeIdea(id){
 
 function getIdeaIndex(){
   $.getJSON('/api/v1/ideas', function(ideas){
+    var allTags = [];
     $.each(ideas, function(index, idea){
       renderIdea(idea);
+      if(idea.tags){
+        idea.tags.split(",").forEach(
+          function(tag){allTags.push(tag)}
+        )
+      }
     })
+    renderTags(_.uniq(allTags));
+  })
+};
+
+function renderTags(tags){
+  tags.forEach(function(tag){
+    $('.idea-tags').append(
+      tag + ',<br>'
+    );
   })
 };
 
@@ -168,10 +183,12 @@ function createIdea(){
   $('#create-idea').on('click', function(){
     var ideaTitle = $('#idea-title').val();
     var ideaBody = $('#idea-body').val();
+    var ideaTags = $('#idea-tags').val();
     var ideaObject = {
       idea: {
         title: ideaTitle,
-        body: ideaBody
+        body: ideaBody,
+        tags: ideaTags
       }
     };
     $.ajax({
@@ -214,6 +231,7 @@ function searchIdeas(){
 
 function renderIdea(idea){
   var body = truncateBody(idea.body);
+  // var tags = renderTags(idea.tags);
 
   $('#idea-index').prepend(
     '<div class="idea" id="idea-' + idea.id + '"><p class="idea"><h4>' + idea.id + '. <span id="idea-title"><span contentEditable=true id="idea-title' + idea.id + '">' + idea.title + '</span> </span>  ' +
@@ -222,7 +240,9 @@ function renderIdea(idea){
     '</h4>' +
     '<span id="idea-body"><span id="idea-body'+idea.id+'" contentEditable=true>"' + body + '" </span></span><br><br>' +
     '<strong> People think this idea is: </strong><em><span class="quality" id="idea-quality' + idea.id + '">' + idea.quality +
-    '</span></em></p>' +
+    '</span></em><br>'+
+    '<div class="tags">Tags: ' + idea.tags + '</div>' +
+    '</p>' +
     '<div id="edit-idea'+ idea.id +'"><div id="edit-idea-title' + idea.id + '"><input class="validate" type="text" id="edit-idea-title-text' + idea.id + '" placeholder="New Title Here"></div>' +
     '<div id="edit-idea-body' + idea.id +'"><input class="validate" type="text" id="edit-idea-body-text' + idea.id + '" placeholder="New Description Here"></div>' +
     '<input class="btn btn-small pull-right" id="save-edit'+ idea.id +'" type="button" name="submit" value="Save"> ' +
@@ -231,6 +251,8 @@ function renderIdea(idea){
     '<input class="btn btn-small pull-right" id="delete-idea-button'+ idea.id +'" type="button" name="submit" value="Delete"></div><br>'
 
   );
+
+
   $('#edit-idea' + idea.id).hide();
 
   editFullIdea(idea.id);
@@ -241,6 +263,10 @@ function renderIdea(idea){
   deleteIdea(idea.id);
   sortIdeas();
 };
+
+// function renderTags(tagString){
+//   return tagString.split(",");
+// };
 
 function truncateBody(body){
   if (body.length > 100){
