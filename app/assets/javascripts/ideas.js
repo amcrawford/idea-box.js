@@ -186,6 +186,7 @@ function createIdea(){
   });
     $('#idea-title').val('New Title');
     $('#idea-body').val(' New Description');
+    $('#idea-tags').val(' New Tags');
   });
 };
 
