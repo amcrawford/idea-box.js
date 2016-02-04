@@ -4,6 +4,27 @@ $(document).ready(function(){
   searchIdeas()
 });
 
+function sortIdeas(){
+  var qualityMap = {
+    "genius": 2,
+    "plausible": 1,
+    "swill": 0
+  };
+
+  var ideas = $('#idea-index div.idea');
+
+  var sortedIdeas = ideas.sort(function(a, b){
+    return qualityMap[$(a).find('.quality').text()] > qualityMap[$(b).find('.quality').text()];
+  });
+
+
+  $('#sort-index').on('click', function(){
+    $('#idea-index').html(sortedIdeas);
+  }).on('click', function(){
+    $('#idea-index').html(sortedIdeas.reverse());
+  })
+};
+
 function likeIdea(id){
   $('#thumb-up' + id).on('click', function(){
     event.preventDefault();
@@ -62,7 +83,47 @@ function getIdeaIndex(){
   })
 };
 
-function editIdea(id){
+function editIdeaTitle(id){
+  $('#idea-title' + id).keydown(function(){
+    if (event.keyCode === 13) {
+      saveEditedTitle(id, $('#idea-title' + id).text())
+    }
+  })
+};
+
+function saveEditedTitle(id, ideaTitle){
+  $.ajax({
+    type: 'PUT',
+    url: '/api/v1/ideas/' + id + '.json',
+    data: {idea: {
+      title: ideaTitle }},
+    success: function(){
+      $('#idea-title' + id).html(ideaTitle);
+    }
+  });
+};
+
+function editIdeaBody(id){
+  $('#idea-body' + id).keydown(function(){
+    if (event.keyCode === 13) {
+      saveEditedBody(id, $('#idea-body' + id).text())
+    }
+  })
+};
+
+function saveEditedBody(id, ideaBody){
+  $.ajax({
+    type: 'PUT',
+    url: '/api/v1/ideas/' + id + '.json',
+    data: {idea: {
+      body: ideaBody }},
+    success: function(){
+      $('#idea-body' + id).html(ideaBody);
+    }
+  });
+};
+
+function editFullIdea(id){
   $('#edit-idea-button' + id).on('click', function(){
     $('#edit-idea' + id).show();
 
@@ -155,12 +216,12 @@ function renderIdea(idea){
   var body = truncateBody(idea.body);
 
   $('#idea-index').prepend(
-    '<div class="idea" id="idea-' + idea.id + '"><p class="idea"><h4>' + idea.id + '. <span id="idea-title"><span id="idea-title' + idea.id + '">' + idea.title + '</span>   ' +
+    '<div class="idea" id="idea-' + idea.id + '"><p class="idea"><h4>' + idea.id + '. <span id="idea-title"><span contentEditable=true id="idea-title' + idea.id + '">' + idea.title + '</span> </span>  ' +
     '<a href="#"><i class="material-icons teal-text" id="thumb-up' + idea.id + '">thumb_up</i></a> ' +
     '<a href="#"><i class="material-icons teal-text" id="thumb-down'+ idea.id + '">thumb_down</i></a><br>' +
     '</h4>' +
-    '</span><span id="idea-body"><span id="idea-body'+idea.id+'">"' + body + '" </span></span><br><br>' +
-    '<strong> People think this idea is: </strong><em><span id="idea-quality' + idea.id + '">' + idea.quality +
+    '<span id="idea-body"><span id="idea-body'+idea.id+'" contentEditable=true>"' + body + '" </span></span><br><br>' +
+    '<strong> People think this idea is: </strong><em><span class="quality" id="idea-quality' + idea.id + '">' + idea.quality +
     '</span></em></p>' +
     '<div id="edit-idea'+ idea.id +'"><div id="edit-idea-title' + idea.id + '"><input class="validate" type="text" id="edit-idea-title-text' + idea.id + '" placeholder="New Title Here"></div>' +
     '<div id="edit-idea-body' + idea.id +'"><input class="validate" type="text" id="edit-idea-body-text' + idea.id + '" placeholder="New Description Here"></div>' +
@@ -172,16 +233,19 @@ function renderIdea(idea){
   );
   $('#edit-idea' + idea.id).hide();
 
-  editIdea(idea.id);
+  editFullIdea(idea.id);
+  editIdeaTitle(idea.id);
+  editIdeaBody(idea.id);
   likeIdea(idea.id);
   dislikeIdea(idea.id);
   deleteIdea(idea.id);
+  sortIdeas();
 };
 
 function truncateBody(body){
   if (body.length > 100){
-    var trimmedBody = body.substring(0,101);
-    return trimmedBody.substring(0, Math.min(trimmedBody.length, trimmedBody.lastIndexOf(' ')))
+    var trimmedBody = body.substring(0,98);
+    return trimmedBody.substring(0, Math.min(trimmedBody.length, trimmedBody.lastIndexOf(' '))) + '...'
   } else {
     return body
   };
