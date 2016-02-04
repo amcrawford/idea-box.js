@@ -103,6 +103,26 @@ function saveEditedTitle(id, ideaTitle){
   });
 };
 
+function editIdeaBody(id){
+  $('#idea-body' + id).keydown(function(){
+    if (event.keyCode === 13) {
+      saveEditedBody(id, $('#idea-body' + id).text())
+    }
+  })
+};
+
+function saveEditedBody(id, ideaBody){
+  $.ajax({
+    type: 'PUT',
+    url: '/api/v1/ideas/' + id + '.json',
+    data: {idea: {
+      body: ideaBody }},
+    success: function(){
+      $('#idea-body' + id).html(ideaBody);
+    }
+  });
+};
+
 function editFullIdea(id){
   $('#edit-idea-button' + id).on('click', function(){
     $('#edit-idea' + id).show();
@@ -215,6 +235,7 @@ function renderIdea(idea){
 
   editFullIdea(idea.id);
   editIdeaTitle(idea.id);
+  editIdeaBody(idea.id);
   likeIdea(idea.id);
   dislikeIdea(idea.id);
   deleteIdea(idea.id);
