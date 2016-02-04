@@ -8,8 +8,22 @@ require 'vcr'
 require "simplecov"
 require 'mocha/mini_test'
 
+class ActionDispatch::IntegrationTest
+  include Capybara::DSL
+
+  def setup
+    Capybara.app = IdeaBox::Application
+    Capybara.current_driver = Capybara.javascript_driver
+    Capybara.default_max_wait_time = 20
+  end
+
+  def create_ideas
+    Idea.create(title: 'testing_title_one', body: 'testing_body_one')
+    Idea.create(title: 'testing_title_two', body: 'testing_body_two')
+  end
+end
+
 class ActiveSupport::TestCase
-  # Setup all fixtures in test/fixtures/*.yml for all tests in alphabetical order.
   fixtures :all
 
   VCR.configure do |config|

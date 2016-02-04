@@ -227,7 +227,7 @@ function renderIdea(idea){
     '<div id="edit-idea-body' + idea.id +'"><input class="validate" type="text" id="edit-idea-body-text' + idea.id + '" placeholder="New Description Here"></div>' +
     '<input class="btn btn-small pull-right" id="save-edit'+ idea.id +'" type="button" name="submit" value="Save"> ' +
     '<input class="btn btn-small pull-right" id="cancel-edit'+ idea.id +'" type="button" name="submit" value="Cancel"></div><br> ' +
-    '<input class="btn btn-small pull-right" id="edit-idea-button'+ idea.id +'" type="button" name="submit" value="Edit">  ' +
+    '<span id="edit'+ idea.id +'"><input class="btn btn-small pull-right" id="edit-idea-button'+ idea.id +'" type="button" name="submit" value="Edit"> </span> ' +
     '<input class="btn btn-small pull-right" id="delete-idea-button'+ idea.id +'" type="button" name="submit" value="Delete"></div><br>'
 
   );
