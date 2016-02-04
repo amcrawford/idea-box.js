@@ -255,9 +255,15 @@ function renderTags(id, tagString){
     var tags = _.uniq(tagString.split(','));
     tags.forEach(function(tag){
       $('#tags-' + id).append(
-        '<a href="#" id="' + tag + '">' + tag + '</a> '
+        '<span id="' + tag + '">' + tag + '</span> '
       );
-      $('#tags-' + id).on('click', function(){
+
+      if (!$('#idea-tags').val().includes(tag)){
+        $('.idea-tags').append(
+          '<a href="#" id="' + tag + '">' + tag + '</a> '
+      )};
+
+      $('#' + tag).on('click', function(){
         $("#idea-index").children().each(function(){
           if ($(this).children().text().search(new RegExp(tag, "i")) < 0) {
             $(this).fadeOut();
@@ -268,8 +274,8 @@ function renderTags(id, tagString){
       })
     })
   }
-
 };
+
 
 function truncateBody(body){
   if (body.length > 100){
