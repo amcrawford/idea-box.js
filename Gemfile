@@ -11,12 +11,19 @@ gem 'sdoc', '~> 0.4.0', group: :doc
 gem 'hurley'
 gem 'materialize-sass'
 gem 'responders'
+gem 'selenium-webdriver'
 
-
+group :test do
+  gem 'webmock'
+end
 
 group :development, :test do
-  gem 'byebug'
   gem 'pry'
+  gem 'mocha'
+  gem 'capybara'
+  gem 'simplecov'
+  gem 'vcr'
+  gem 'launchy'
 end
 
 group :development do
