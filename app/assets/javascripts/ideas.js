@@ -77,24 +77,9 @@ function dislikeIdea(id){
 
 function getIdeaIndex(){
   $.getJSON('/api/v1/ideas', function(ideas){
-    var allTags = [];
     $.each(ideas, function(index, idea){
       renderIdea(idea);
-      if(idea.tags){
-        idea.tags.split(",").forEach(
-          function(tag){allTags.push(tag)}
-        )
-      }
-    })
-    renderTags(_.uniq(allTags));
   })
-};
-
-function renderTags(tags){
-  tags.forEach(function(tag){
-    $('.idea-tags').append(
-      tag + ',<br>'
-    );
   })
 };
 
@@ -241,7 +226,7 @@ function renderIdea(idea){
     '<span id="idea-body"><span id="idea-body'+idea.id+'" contentEditable=true>"' + body + '" </span></span><br><br>' +
     '<strong> People think this idea is: </strong><em><span class="quality" id="idea-quality' + idea.id + '">' + idea.quality +
     '</span></em><br>'+
-    '<div class="tags">Tags: ' + idea.tags + '</div>' +
+    '<div class="tags" id="tags-'+idea.id+'">Tags: </div>' +
     '</p>' +
     '<div id="edit-idea'+ idea.id +'"><div id="edit-idea-title' + idea.id + '"><input class="validate" type="text" id="edit-idea-title-text' + idea.id + '" placeholder="New Title Here"></div>' +
     '<div id="edit-idea-body' + idea.id +'"><input class="validate" type="text" id="edit-idea-body-text' + idea.id + '" placeholder="New Description Here"></div>' +
@@ -261,12 +246,30 @@ function renderIdea(idea){
   likeIdea(idea.id);
   dislikeIdea(idea.id);
   deleteIdea(idea.id);
+  renderTags(idea.id, idea.tags);
   sortIdeas();
 };
 
-// function renderTags(tagString){
-//   return tagString.split(",");
-// };
+function renderTags(id, tagString){
+  if (tagString){
+    var tags = _.uniq(tagString.split(','));
+    tags.forEach(function(tag){
+      $('#tags-' + id).append(
+        '<a href="#" id="' + tag + '">' + tag + '</a> '
+      );
+      $('#tags-' + id).on('click', function(){
+        $("#idea-index").children().each(function(){
+          if ($(this).children().text().search(new RegExp(tag, "i")) < 0) {
+            $(this).fadeOut();
+          } else {
+            $(this).show();
+          }
+        });
+      })
+    })
+  }
+
+};
 
 function truncateBody(body){
   if (body.length > 100){
