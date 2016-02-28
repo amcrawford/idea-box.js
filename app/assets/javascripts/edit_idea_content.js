@@ -40,33 +40,44 @@ function saveEditedBody(id, ideaBody){
 
 function editFullIdea(id){
   $('#edit-idea-button' + id).on('click', function(){
-    $('#edit-idea' + id).show();
-
-    $('#edit-idea-button' + id).hide();
-
+    showEditFields(id)
     $('#save-edit' + id).on('click', function(){
-      var ideaTitle = $('#edit-idea-title-text' + id).val();
-      var ideaBody = $('#edit-idea-body-text' + id).val();
-      var ideaObject = {
-        idea: {
-          title: ideaTitle,
-          body: ideaBody
-        }
-      };
-      $.ajax({
-        type: 'PUT',
-        url: '/api/v1/ideas/' + id + '.json',
-        data: ideaObject,
-        success: function(){
-          $('#idea-title' + id).html(ideaTitle);
-          $('#idea-body' + id).html(ideaBody);
-          closeEditFields(id);
-        }
-    });
-  })
+      saveEditedIdea(id)
+    })
     cancelEdit(id);
   })
 };
+
+function getNewIdeaValues(id){
+  var ideaTitle = $('#edit-idea-title-text' + id).val();
+  var ideaBody = $('#edit-idea-body-text' + id).val();
+  return ideaObject = {
+    idea: {
+      title: ideaTitle,
+      body: ideaBody
+    }
+  };
+}
+
+function saveEditedIdea(id){
+  var ideaObject = getNewIdeaValues(id)
+
+  $.ajax({
+    type: 'PUT',
+    url: '/api/v1/ideas/' + id + '.json',
+    data: ideaObject,
+    success: function(){
+      $('#idea-title' + id).html(ideaObject.idea.title);
+      $('#idea-body' + id).html(ideaObject.idea.body);
+      closeEditFields(id);
+    }
+  });
+}
+
+function showEditFields(id){
+  $('#edit-idea' + id).show();
+  $('#edit-idea-button' + id).hide();
+}
 
 function closeEditFields(id){
   $('#edit-idea' + id).hide();
